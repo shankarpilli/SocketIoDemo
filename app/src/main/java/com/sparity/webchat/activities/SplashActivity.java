@@ -1,14 +1,14 @@
-package com.sparity.webchat;
+package com.sparity.webchat.activities;
 
 import android.app.Activity;
-
-import com.sparity.webchat.utility.Constants;
-import com.sparity.webchat.utility.Utility;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
+
+import com.sparity.webchat.R;
+import com.sparity.webchat.utility.Constants;
+import com.sparity.webchat.utility.Utility;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +29,7 @@ public class SplashActivity extends Activity {
         Runnable action = new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                Intent intent = new Intent(SplashActivity.this, LoginChatActivity.class);
                 startActivity(intent);
                 finish();
             }

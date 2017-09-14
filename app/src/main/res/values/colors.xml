@@ -3,7 +3,7 @@
 
 
     <color name="colorPrimary">#00BB69</color>
-    <color name="colorPrimaryDark">#0A663E</color>
+    <color name="colorPrimaryDark">#029C58</color>
     <color name="colorAccent">#00BB69</color>
 
     <color name="username0">#e21400</color>
@@ -18,5 +18,8 @@
     <color name="username9">#3824aa</color>
     <color name="username10">#a700ff</color>
     <color name="username11">#d300e7</color>
+
+    <color name="error_alert">#FB5151</color>
+    <color name="black">@android:color/black</color>
 
 </resources>
