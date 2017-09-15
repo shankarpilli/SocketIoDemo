@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 import com.sparity.webchat.BaseActivity;
-import com.sparity.webchat.MainActivity;
 import com.sparity.webchat.R;
 import com.sparity.webchat.asynctask.IAsyncCaller;
 import com.sparity.webchat.aynctaskold.ServerIntractorAsync;
