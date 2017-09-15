@@ -16,6 +16,7 @@
         android:inputType="text"
         android:minHeight="@dimen/_40dp"
         android:paddingEnd="@dimen/_10dp"
+        android:text="venki@sparity.com"
         android:paddingStart="@dimen/_10dp"
         android:textSize="@dimen/_18sp" />
 
@@ -29,6 +30,7 @@
         android:inputType="textPassword"
         android:minHeight="@dimen/_40dp"
         android:paddingEnd="@dimen/_10dp"
+        android:text="X12345678"
         android:paddingStart="@dimen/_10dp"
         android:textSize="@dimen/_18sp" />
 

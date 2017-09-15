@@ -3,6 +3,7 @@
     package="com.sparity.webchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".ChatApplication"
@@ -31,6 +32,7 @@
             android:name=".activities.LoginChatActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity android:name=".activities.ListActivity"></activity>
     </application>
 
 </manifest>

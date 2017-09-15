@@ -8,4 +8,8 @@ public class Constants {
 
     public static int SPLASH_TIME_OUT = 3000;
     public static final boolean logMessageOnOrOff = true;
+    public static final String APP_PREF = "SOCKET_DEMO_Pref";
+    public static final String LOGIN_DATA = "LOGIN_DATA";
+    public static final String TOKEN = "TOKEN";
+
 }

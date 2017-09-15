@@ -1,21 +1,17 @@
 package com.sparity.webchat.models;
 
-import java.io.Serializable;
-
 /**
- * Created by Shankar on 9/14/2017.
+ * Created by Shankar on 9/15/2017.
  */
 
-public class LoginModel extends Model implements Serializable {
+public class ListModel {
+
     private String id;
     private String email;
     private String username;
     private String image;
-    private String bio;
     private String createdAt;
     private String updatedAt;
-    private String token;
-    private String code;
 
     public String getId() {
         return id;
@@ -49,14 +45,6 @@ public class LoginModel extends Model implements Serializable {
         this.image = image;
     }
 
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
     public String getCreatedAt() {
         return createdAt;
     }
@@ -71,21 +59,5 @@ public class LoginModel extends Model implements Serializable {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 }

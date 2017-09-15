@@ -15,7 +15,8 @@ public class APIConstants {
 
     public static String ERROR_MESSAGE = "We could not process your request at this time. Please try again later.";
 
-    public static String BASE_URL = "http://139.59.30.4/api/v1.0/";
+    public static String BASE_URL = "http://557a43b1.ngrok.io/api/";
 
-    public static String LOGIN = BASE_URL + "login";
+    public static String LOGIN = BASE_URL + "users/login";
+    public static String OTHERS = BASE_URL + "others";
 }

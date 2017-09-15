@@ -8,14 +8,15 @@ import com.sparity.webchat.BaseActivity;
 import com.sparity.webchat.MainActivity;
 import com.sparity.webchat.R;
 import com.sparity.webchat.asynctask.IAsyncCaller;
-import com.sparity.webchat.asynctask.ServerJSONAsyncTask;
+import com.sparity.webchat.aynctaskold.ServerIntractorAsync;
 import com.sparity.webchat.models.LoginModel;
 import com.sparity.webchat.models.Model;
 import com.sparity.webchat.parser.LoginParser;
 import com.sparity.webchat.utility.APIConstants;
+import com.sparity.webchat.utility.Constants;
 import com.sparity.webchat.utility.Utility;
 
-import java.util.LinkedHashMap;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,16 +54,17 @@ public class LoginChatActivity extends BaseActivity implements IAsyncCaller {
      */
     private void navigateDashBoard() {
         try {
-            LinkedHashMap linkedHashMap = new LinkedHashMap();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("email", edt_user_name.getText().toString());
+            jsonObject.put("password", edt_password.getText().toString());
+            JSONObject jsonUserObject = new JSONObject();
+            jsonUserObject.put("user", jsonObject);
 
-            linkedHashMap.put("username", edt_user_name.getText().toString());
-            linkedHashMap.put("password", edt_password.getText().toString());
-
-            LoginParser visitorParser = new LoginParser();
-            ServerJSONAsyncTask serverJSONAsyncTask = new ServerJSONAsyncTask(
+            LoginParser loginParser = new LoginParser();
+            ServerIntractorAsync serverJSONAsyncTask = new ServerIntractorAsync(
                     this, Utility.getResourcesString(this, R.string.please_wait), true,
-                    APIConstants.LOGIN, linkedHashMap,
-                    APIConstants.REQUEST_TYPE.POST, this, visitorParser);
+                    APIConstants.LOGIN, jsonUserObject,
+                    APIConstants.REQUEST_TYPE.POST, this, loginParser);
             Utility.execute(serverJSONAsyncTask);
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,7 +97,10 @@ public class LoginChatActivity extends BaseActivity implements IAsyncCaller {
         if (model != null) {
             if (model instanceof LoginModel) {
                 mLoginModel = (LoginModel) model;
-                navigateToIntent();
+                if (mLoginModel != null && mLoginModel.getToken() != null) {
+                    Utility.setSharedPrefStringData(LoginChatActivity.this, Constants.TOKEN, mLoginModel.getToken());
+                    navigateToIntent();
+                }
             }
         }
     }
@@ -104,7 +109,8 @@ public class LoginChatActivity extends BaseActivity implements IAsyncCaller {
      * This method is used to navigate intent
      */
     private void navigateToIntent() {
-        Intent intent = new Intent(LoginChatActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginChatActivity.this, ListActivity.class);
+        intent.putExtra(Constants.LOGIN_DATA, mLoginModel);
         startActivity(intent);
     }
 }

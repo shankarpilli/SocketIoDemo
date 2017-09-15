@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -23,6 +24,26 @@ import android.widget.Toast;
 
 import com.sparity.webchat.R;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+
 /**
  * Created by Shankar on 9/14/2017.
  */
@@ -31,6 +52,8 @@ public class Utility {
 
     public static final int NO_INTERNET_CONNECTION = 1;
     private static final int NO_GPS_ACCESS = 2;
+
+    private static final int CONNECTION_TIMEOUT = 25000;
 
     /**
      * This method is used to get the typeface for the material icons
@@ -232,6 +255,113 @@ public class Utility {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
         } else {
             task.execute(params);
+        }
+    }
+
+    public static String httpJsonRequest(String url, JSONObject mParams, Context context) {
+        String websiteData = "error";
+        HttpClient client = new DefaultHttpClient();
+        HttpConnectionParams.setConnectionTimeout(client.getParams(),
+                CONNECTION_TIMEOUT); // Timeout
+        // Limit
+        HttpResponse response;
+        HttpPost post = new HttpPost(url);
+        StringEntity se;
+        try {
+            String s = mParams.toString();
+            se = new StringEntity(s);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE,
+                    "application/json"));
+            post.setEntity(se);
+            response = client.execute(post);
+            //* Checking response *//*
+            if (response != null) {
+                websiteData = EntityUtils.toString(response.getEntity());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            websiteData = "error";
+            return websiteData;
+        }
+        return websiteData;
+    }
+
+    public static String getWithHeader(String url, Context mContext) {
+        showLog("Url", url);
+        InputStream inputStream = null;
+        String result = "";
+        try {
+            final HttpParams httpParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParams,
+                    CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpParams,
+                    CONNECTION_TIMEOUT);
+
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient(httpParams);
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.setHeader("Authorization", "Bearer "+Utility.getSharedPrefStringData(mContext, Constants.TOKEN));
+            HttpResponse httpResponse = httpclient.execute(httpGet);
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+            // convert inputstream to string
+            if (inputStream != null) {
+                result = convertInputStreamToString(inputStream);
+            } else {
+                result = "Did not work!";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+    /**
+     * GET SHARED PREFERENCES STRING DATA
+     */
+    public static String getSharedPrefStringData(Context context, String key) {
+
+        try {
+            SharedPreferences userAcountPreference = context
+                    .getSharedPreferences(Constants.APP_PREF,
+                            Context.MODE_PRIVATE);
+            return userAcountPreference.getString(key, "");
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return "";
+
+    }
+
+    private static String convertInputStreamToString(InputStream inputStream)
+            throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(inputStream));
+        String line = "";
+        String result = "";
+        while ((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        return result;
+    }
+
+    /**
+     * Sharedpreference method to set and get string variable
+     */
+    public static void setSharedPrefStringData(Context context, String key, String value) {
+        try {
+            if (context != null) {
+                SharedPreferences appInstallInfoSharedPref = context.getSharedPreferences(Constants.APP_PREF,
+                        Context.MODE_PRIVATE);
+                SharedPreferences.Editor appInstallInfoEditor = appInstallInfoSharedPref.edit();
+                appInstallInfoEditor.putString(key, value);
+                appInstallInfoEditor.apply();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

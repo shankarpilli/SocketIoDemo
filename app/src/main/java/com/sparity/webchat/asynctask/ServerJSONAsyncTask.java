@@ -40,17 +40,17 @@ public class ServerJSONAsyncTask extends BaseAsyncTask {
     private java.net.CookieManager msCookieManager = new java.net.CookieManager();
 
     public ServerJSONAsyncTask(Context context, String dialogMessage,
-                               boolean showDialog, String url, LinkedHashMap<String, String> mParams,
+                               boolean showDialog, String url, JSONObject mParamMap,
                                APIConstants.REQUEST_TYPE requestType, IAsyncCaller caller, Parser parser) {
-        super(context, dialogMessage, showDialog, url, mParams, requestType,
+        super(context, dialogMessage, showDialog, url, mParamMap, requestType,
                 caller, parser);
 
     }
 
     public ServerJSONAsyncTask(Context context, String dialogMessage,
-                               boolean showDialog, String url, LinkedHashMap<String, String> mParams,
+                               boolean showDialog, String url, JSONObject mParamMap,
                                APIConstants.REQUEST_TYPE requestType, IAsyncCaller caller, Parser parser, String tag, File file, ArrayList<File> mFiles) {
-        super(context, dialogMessage, showDialog, url, mParams, requestType,
+        super(context, dialogMessage, showDialog, url, mParamMap, requestType,
                 caller, parser, tag, file, mFiles);
 
     }
@@ -166,7 +166,6 @@ public class ServerJSONAsyncTask extends BaseAsyncTask {
                 OutputStream os = connection.getOutputStream();
                 Writer writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
                 writer.write(param1);
-                //writer.write(param1);
                 /*
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
                 writer.write(URLEncoder.encode(param1));*/
