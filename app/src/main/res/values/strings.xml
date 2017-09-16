@@ -35,6 +35,9 @@
     <string name="no_internet_msg_main">This Application required internet connection. Please check your internet setting and try again.</string>
     <string name="no_internet_title">No internet</string>
 
+    <string name="user">User</string>
+    <string name="log_out">Logout</string>
+
 
     <string name="type_a_message">Type a message...</string>
 

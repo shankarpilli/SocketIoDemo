@@ -3,6 +3,7 @@ package com.sparity.webchat.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.sparity.webchat.BaseActivity;
 import com.sparity.webchat.ChatApplication;
@@ -18,15 +19,14 @@ import com.sparity.webchat.utility.APIConstants;
 import com.sparity.webchat.utility.Constants;
 import com.sparity.webchat.utility.Utility;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 public class ListActivity extends BaseActivity implements IAsyncCaller {
 
@@ -34,6 +34,10 @@ public class ListActivity extends BaseActivity implements IAsyncCaller {
     private ListArrayModel mListArrayModel;
     private Intent intent;
     private UserListAdapter userListAdapter;
+    @BindView(R.id.tv_logout)
+    TextView tv_logout;
+    @BindView(R.id.tv_user)
+    TextView tv_user;
     @BindView(R.id.list_view)
     ListView list_view;
     private Socket mSocket;
@@ -41,6 +45,7 @@ public class ListActivity extends BaseActivity implements IAsyncCaller {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme_NoActionBar);
         setContentView(R.layout.activity_list);
 
         ChatApplication app = (ChatApplication) getApplication();
@@ -48,8 +53,10 @@ public class ListActivity extends BaseActivity implements IAsyncCaller {
 
         ButterKnife.bind(this);
         intent = getIntent();
-        if (intent.hasExtra(Constants.LOGIN_DATA))
+        if (intent.hasExtra(Constants.LOGIN_DATA)) {
             mLoginModel = (LoginModel) intent.getSerializableExtra(Constants.LOGIN_DATA);
+            tv_user.setText(Utility.capitalizeFirstLetter(mLoginModel.getUsername()));
+        }
         if (mLoginModel != null) {
             getListData();
         }
@@ -119,5 +126,14 @@ public class ListActivity extends BaseActivity implements IAsyncCaller {
     public void onDestroy() {
         super.onDestroy();
         mSocket.disconnect();
+    }
+
+    @OnClick(R.id.tv_logout)
+    void logout() {
+        Intent intent = new Intent(this, LoginChatActivity.class);
+        Utility.setSharedPrefStringData(this, Constants.TOKEN, "");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

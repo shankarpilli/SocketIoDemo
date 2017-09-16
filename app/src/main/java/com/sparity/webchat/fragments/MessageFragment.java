@@ -13,14 +13,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +27,10 @@ import com.sparity.webchat.Message;
 import com.sparity.webchat.MessageAdapter;
 import com.sparity.webchat.R;
 import com.sparity.webchat.activities.MessageActivity;
+import com.sparity.webchat.customviews.CircleTransform;
 import com.sparity.webchat.utility.Constants;
 import com.sparity.webchat.utility.Utility;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,6 +64,9 @@ public class MessageFragment extends Fragment {
     private Socket mSocket;
 
     private Boolean isConnected = true;
+
+    private ImageView img_image;
+    private TextView tv_name;
 
     public MessageFragment() {
         super();
@@ -132,6 +135,16 @@ public class MessageFragment extends Fragment {
         mSocket.on("stopType", onStopTyping);
         mSocket.connect();
 
+        img_image = (ImageView) view.findViewById(R.id.img_image);
+        tv_name = (TextView) view.findViewById(R.id.tv_name);
+        if (mParent.mListModel != null && mParent.mListModel.getUsername() != null)
+            tv_name.setText(Utility.capitalizeFirstLetter(mParent.mListModel.getUsername()));
+        if (mParent.mListModel != null && mParent.mListModel.getImage() != null)
+            Picasso.with(mParent)
+                    .load(mParent.mListModel.getImage())
+                    .transform(new CircleTransform())
+                    .into(img_image);
+
         mMessagesView = (RecyclerView) view.findViewById(R.id.messages);
         mMessagesView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMessagesView.setAdapter(mAdapter);
@@ -178,29 +191,6 @@ public class MessageFragment extends Fragment {
                 attemptSend();
             }
         });
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_main, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_leave) {
-            leave();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void addLog(String message) {
@@ -268,12 +258,6 @@ public class MessageFragment extends Fragment {
         // perform the sending message attempt.
         Utility.showLog("Sending message", "Sending message" + jsonObject);
         mSocket.emit(Constants.SEND, jsonObject);
-    }
-
-
-    private void leave() {
-        mSocket.disconnect();
-        mSocket.connect();
     }
 
     private void scrollToBottom() {

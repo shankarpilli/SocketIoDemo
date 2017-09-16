@@ -19,7 +19,7 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
+        setTheme(R.style.AppTheme_NoActionBar);
         intent = getIntent();
         if (intent.hasExtra(Constants.LOGIN_DATA)) {
             mLoginModel = (LoginModel) intent.getSerializableExtra(Constants.LOGIN_DATA);
@@ -27,5 +27,6 @@ public class MessageActivity extends AppCompatActivity {
         if (intent.hasExtra(Constants.CURRENT_CHAT_USER_DATA)) {
             mListModel = (ListModel) intent.getSerializableExtra(Constants.CURRENT_CHAT_USER_DATA);
         }
+        setContentView(R.layout.activity_message);
     }
 }
