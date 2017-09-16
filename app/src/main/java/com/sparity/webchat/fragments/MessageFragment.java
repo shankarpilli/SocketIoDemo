@@ -27,7 +27,15 @@ import com.sparity.webchat.Message;
 import com.sparity.webchat.MessageAdapter;
 import com.sparity.webchat.R;
 import com.sparity.webchat.activities.MessageActivity;
+import com.sparity.webchat.asynctask.IAsyncCaller;
+import com.sparity.webchat.aynctaskold.ServerIntractorAsync;
 import com.sparity.webchat.customviews.CircleTransform;
+import com.sparity.webchat.models.DataArrayModel;
+import com.sparity.webchat.models.ListArrayModel;
+import com.sparity.webchat.models.Model;
+import com.sparity.webchat.parser.HistoryDataParser;
+import com.sparity.webchat.parser.LoginParser;
+import com.sparity.webchat.utility.APIConstants;
 import com.sparity.webchat.utility.Constants;
 import com.sparity.webchat.utility.Utility;
 import com.squareup.picasso.Picasso;
@@ -45,7 +53,7 @@ import io.socket.emitter.Emitter;
  * Created by Shankar on 9/16/2017.
  */
 
-public class MessageFragment extends Fragment {
+public class MessageFragment extends Fragment implements IAsyncCaller {
 
     private static final String TAG = "MainFragment";
     private MessageActivity mParent;
@@ -67,6 +75,7 @@ public class MessageFragment extends Fragment {
 
     private ImageView img_image;
     private TextView tv_name;
+    private DataArrayModel mDataArrayModel;
 
     public MessageFragment() {
         super();
@@ -121,6 +130,7 @@ public class MessageFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getHistoryData();
         Utility.showLog("onViewCreated", "onViewCreated");
         ChatApplication app = (ChatApplication) getActivity().getApplication();
         mSocket = app.getSocket();
@@ -191,6 +201,21 @@ public class MessageFragment extends Fragment {
                 attemptSend();
             }
         });
+    }
+
+    private void getHistoryData() {
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            HistoryDataParser historyDataParser = new HistoryDataParser();
+            ServerIntractorAsync serverJSONAsyncTask = new ServerIntractorAsync(
+                    mParent, Utility.getResourcesString(mParent, R.string.please_wait), true,
+                    APIConstants.HISTORY_DATA + mParent.mListModel.getRoom(), jsonObject,
+                    APIConstants.REQUEST_TYPE.GET, this, historyDataParser);
+            Utility.execute(serverJSONAsyncTask);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void addLog(String message) {
@@ -435,4 +460,28 @@ public class MessageFragment extends Fragment {
             mSocket.emit("stopType");
         }
     };
+
+    /**
+     * This method is used get the output of the service with a model
+     */
+    @Override
+    public void onComplete(Model model) {
+        if (model != null) {
+            if (model instanceof DataArrayModel) {
+                mDataArrayModel = (DataArrayModel) model;
+                setHistoryData();
+            }
+        }
+    }
+
+    /**
+     * This method is used to set the old data
+     */
+    private void setHistoryData() {
+        if (mDataArrayModel != null && mDataArrayModel.getDataModels().size() > 0) {
+            for (int i = 0; i < mDataArrayModel.getDataModels().size(); i++) {
+                addMessage(mDataArrayModel.getDataModels().get(i).getSenderId(), mDataArrayModel.getDataModels().get(i).getMessage());
+            }
+        }
+    }
 }

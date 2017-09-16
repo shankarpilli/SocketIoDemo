@@ -20,4 +20,5 @@ public class APIConstants {
 
     public static String LOGIN = BASE_URL + "users/login";
     public static String OTHERS = BASE_URL + "others";
+    public static String HISTORY_DATA = BASE_URL + "history/";
 }
