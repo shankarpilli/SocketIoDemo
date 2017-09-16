@@ -246,7 +246,7 @@ public class MessageFragment extends Fragment {
         }
 
         mInputMessageView.setText("");
-        //addMessage(mUsername, message);
+        addMessage(mParent.mLoginModel.getId(), message);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put(Constants.ROOM, mParent.mListModel.getRoom());
@@ -330,7 +330,8 @@ public class MessageFragment extends Fragment {
                     }
 
                     removeTyping(username);
-                    addMessage(username, message);
+                    if (!username.equalsIgnoreCase(mParent.mLoginModel.getId()))
+                        addMessage(username, message);
                 }
             });
         }
