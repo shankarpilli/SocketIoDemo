@@ -1,10 +1,12 @@
 package com.sparity.webchat.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Shankar on 9/15/2017.
  */
 
-public class ListModel {
+public class ListModel implements Serializable {
 
     private String id;
     private String email;

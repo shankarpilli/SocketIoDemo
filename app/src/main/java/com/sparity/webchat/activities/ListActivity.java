@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -53,7 +54,6 @@ public class ListActivity extends BaseActivity implements IAsyncCaller {
             getListData();
         }
         mSocket.connect();
-        mSocket.on("message", onMessage);
     }
 
     /**
@@ -106,12 +106,18 @@ public class ListActivity extends BaseActivity implements IAsyncCaller {
         }
     }
 
+    @OnItemClick(R.id.list_view)
+    void onItemClick(int position) {
+        Intent intent = new Intent(ListActivity.this, MessageActivity.class);
+        intent.putExtra(Constants.LOGIN_DATA, mLoginModel);
+        intent.putExtra(Constants.CURRENT_CHAT_USER_DATA, mListArrayModel.getListModels().get(position));
+        startActivity(intent);
+    }
 
-    private Emitter.Listener onMessage = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            JSONArray data = (JSONArray) args[0];
-            Utility.showLog("data", data.toString());
-        }
-    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSocket.disconnect();
+    }
 }

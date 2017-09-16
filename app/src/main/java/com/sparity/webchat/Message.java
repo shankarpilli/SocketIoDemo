@@ -3,6 +3,7 @@ package com.sparity.webchat;
 public class Message {
 
     public static final int TYPE_MESSAGE = 0;
+    public static final int TYPE_MESSAGE_GOT = 4;
     public static final int TYPE_LOG = 1;
     public static final int TYPE_ACTION = 2;
 
