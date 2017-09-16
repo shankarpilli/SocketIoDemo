@@ -22,6 +22,9 @@
     <color name="username11">#d300e7</color>
 
     <color name="error_alert">#FB5151</color>
+    <color name="whats_app_bg">#e4dcd4</color>
+    <color name="whats_app_sent_bg">#dcf8c6</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">@android:color/black</color>
 
 </resources>
