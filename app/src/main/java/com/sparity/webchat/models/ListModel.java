@@ -12,6 +12,7 @@ public class ListModel {
     private String image;
     private String createdAt;
     private String updatedAt;
+    private String room;
 
     public String getId() {
         return id;
@@ -59,5 +60,13 @@ public class ListModel {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
     }
 }

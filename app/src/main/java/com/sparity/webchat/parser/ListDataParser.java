@@ -43,6 +43,8 @@ public class ListDataParser implements Parser<Model> {
                             listModel.setCreatedAt(othersJsonObj.optString("createdAt"));
                         if (othersJsonObj.has("updatedAt"))
                             listModel.setUpdatedAt(othersJsonObj.optString("updatedAt"));
+                        if (othersJsonObj.has("room"))
+                            listModel.setRoom(othersJsonObj.optString("room"));
 
                         listModels.add(listModel);
                     }

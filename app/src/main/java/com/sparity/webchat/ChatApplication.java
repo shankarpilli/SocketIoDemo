@@ -2,6 +2,7 @@ package com.sparity.webchat;
 
 import android.app.Application;
 
+
 import java.net.URISyntaxException;
 
 import io.socket.client.IO;

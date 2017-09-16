@@ -12,4 +12,6 @@ public class Constants {
     public static final String LOGIN_DATA = "LOGIN_DATA";
     public static final String TOKEN = "TOKEN";
 
+    public static final String SUBSCRIBE = "subscribe";
+
 }
