@@ -355,8 +355,10 @@ public class MessageFragment extends Fragment implements IAsyncCaller {
                     }
 
                     removeTyping(username);
-                    if (!username.equalsIgnoreCase(mParent.mLoginModel.getId()))
-                        addMessage(username, message);
+                    if (mParent.mListModel.getRoom().equalsIgnoreCase(data.optString("room"))) {
+                        if (!username.equalsIgnoreCase(mParent.mLoginModel.getId()))
+                            addMessage(username, message);
+                    }
                 }
             });
         }
